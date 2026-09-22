@@ -78,6 +78,14 @@ class FillSpec extends AnyFlatSpec with Matchers {
     (chirrtl should include).regex(cat)
     (chirrtl should not).include("Bitwise.scala")
   }
+  it should "propagate a literal so that it can be used as a Reg's initial value" in {
+    class MyModule extends Module with RequireAsyncReset {
+      val reg1 = RegInit(Fill(3, true.B))
+      val reg2 = RegInit(Fill(4, "b1010".U))
+      val reg3 = RegInit(Fill(5, 1.U))
+    }
+    val verilog = ChiselStage.emitSystemVerilogFile(new MyModule)
+  }
 }
 
 class ReverseSpec extends AnyFlatSpec with Matchers {
